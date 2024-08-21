@@ -70,7 +70,10 @@ export const createServer = async (
 
     revalidatePath(pathname);
 
-    return server;
+    return {
+      message: "Server created successfully",
+      success: 200,
+    };
   } catch (error) {
     console.log(error);
     throw new Error(
@@ -94,6 +97,64 @@ export const getServers = async (profileId: string) => {
     if (!servers) throw new Error("No servers found");
 
     return servers;
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const getServerById = async (profileId: string, serverId: string) => {
+  try {
+    const server = await db.server.findUnique({
+      where: {
+        id: serverId,
+        members: {
+          some: {
+            profileId,
+          },
+        },
+      },
+    });
+
+    if (!server) throw new Error("Server not found");
+
+    return server;
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const getServerChannels = async (serverId: string) => {
+  try {
+    const server = await db.server.findUnique({
+      where: {
+        id: serverId,
+      },
+      include: {
+        channels: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+        members: {
+          include: {
+            profile: true,
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
+    });
+
+    if (!server) throw new Error("Server not found");
+
+    return server;
   } catch (error) {
     console.log(error);
     throw new Error(

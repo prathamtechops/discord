@@ -5,6 +5,7 @@ import { serverSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import FileUploadInput from "./FileUploadInput";
 import InputField from "./InputField";
@@ -25,9 +26,14 @@ export const ServerForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof serverSchema>) {
     try {
-      await createServer(values, pathname);
+      const res = await createServer(values, pathname);
+      if (res.success) {
+        toast.success(res.message);
+      }
     } catch (error) {
-      console.log(error);
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong"
+      );
     }
   }
 
