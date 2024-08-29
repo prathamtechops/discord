@@ -31,7 +31,6 @@ export const initialProfile = async () => {
 
     return profile;
   } catch (error) {
-    console.log(error);
     throw new Error(
       error instanceof Error ? error.message : "Something went wrong"
     );
@@ -43,7 +42,7 @@ export const getProfile = async () => {
     const { userId } = auth();
 
     if (!userId) {
-      throw new Error("Unauthorized");
+      return null;
     }
 
     const profile = await db.profile.findUnique({
@@ -53,13 +52,11 @@ export const getProfile = async () => {
     });
 
     if (!profile) {
-      throw new Error("Profile not found");
+      redirect("sign-in");
     }
 
     return profile;
   } catch (error) {
-    throw new Error(
-      error instanceof Error ? error.message : "Something went wrong"
-    );
+    return null;
   }
 };

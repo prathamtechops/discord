@@ -1,18 +1,15 @@
 import { ServerWithMembersWithProfile } from "@/types";
 import { MemberRole } from "@prisma/client";
-import {
-  AvatarIcon,
-  ChevronDownIcon,
-  ExitIcon,
-  GearIcon,
-  PlusCircledIcon,
-  TrashIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import CreateChannelButton from "./CreateChannelAction";
+import DeleteServerButton from "./DeleteServerButton";
 import InviteButton from "./InviteButton";
+import LeaveServerButton from "./LeaveServer";
+import ManageMembers from "./ManageMembers";
+import ServerSttings from "./ServerSttings";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
@@ -38,39 +35,21 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         {isModerator && <InviteButton server={server} />}
         {isAdmin && (
           <>
-            <DropdownMenuItem className="cursor-pointer px-3 py-2 text-sm ">
-              Server Settings
-              <GearIcon className="ml-auto size-4" />
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer px-3 py-2 text-sm ">
-              Manage Members
-              <AvatarIcon className="ml-auto size-4" />
-            </DropdownMenuItem>
+            <ServerSttings server={server} />
+
+            <ManageMembers server={server} />
           </>
         )}
         {isModerator && (
           <>
-            <DropdownMenuItem className="cursor-pointer px-3 py-2 text-sm ">
-              Create Channel
-              <PlusCircledIcon className="ml-auto size-4" />
-            </DropdownMenuItem>
+            <CreateChannelButton server={server} />
             <DropdownMenuSeparator />
           </>
         )}
 
-        {isAdmin && (
-          <DropdownMenuItem className="cursor-pointer px-3 py-2 text-sm text-rose-500 ">
-            Delete Server
-            <TrashIcon className="ml-auto size-4" />
-          </DropdownMenuItem>
-        )}
+        {isAdmin && <DeleteServerButton server={server} />}
 
-        {!isAdmin && (
-          <DropdownMenuItem className="cursor-pointer px-3 py-2 text-sm text-rose-500 ">
-            Leave Server
-            <ExitIcon className="ml-auto size-4" />
-          </DropdownMenuItem>
-        )}
+        {!isAdmin && <LeaveServerButton server={server} />}
       </DropdownMenuContent>
     </DropdownMenu>
   );

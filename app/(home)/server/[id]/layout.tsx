@@ -19,6 +19,10 @@ const ServerIdLayout = async ({
 
   const server = await getServerById(profile.id, params.id);
 
+  if (!server) {
+    return redirect("/");
+  }
+
   return (
     <div className="h-full">
       <div className="fixed inset-y-0 z-20 hidden h-full w-60 flex-col md:flex">

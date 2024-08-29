@@ -25,7 +25,7 @@ model Server {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   imageUrl   String @db.String
-  inviteCode String
+  inviteCode String @unique
   profileId  String @db.ObjectId // This remains an ObjectId
 
   createdAt DateTime @default(now())

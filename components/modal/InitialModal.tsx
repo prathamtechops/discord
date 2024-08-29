@@ -1,11 +1,11 @@
-import { ServerForm } from "./ServerForm";
+import { ServerForm } from "@/components/ServerForm";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
 
 const InitialModal = () => {
   return (

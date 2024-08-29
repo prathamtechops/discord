@@ -1,5 +1,4 @@
-import InitialModal from "@/components/InitialModal";
-import { ModeToggle } from "@/components/mode-toggle";
+import InitialModal from "@/components/modal/InitialModal";
 import { initialProfile } from "@/lib/action/profile.action";
 import { getUserServers } from "@/lib/action/servers.action";
 import { redirect } from "next/navigation";
@@ -20,7 +19,6 @@ const Home = async () => {
   return (
     <div>
       <InitialModal />
-      <ModeToggle />
     </div>
   );
 };

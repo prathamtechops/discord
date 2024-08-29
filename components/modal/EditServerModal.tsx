@@ -1,15 +1,7 @@
 "use client";
-import { createServer } from "@/lib/action/servers.action";
-import { serverSchema } from "@/lib/validations";
-import { useModalStore } from "@/store/modal.store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { usePathname } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
-import FileUploadInput from "./FileUploadInput";
-import InputField from "./InputField";
-import { Button } from "./ui/button";
+import FileUploadInput from "@/components/FileUploadInput";
+import InputField from "@/components/InputField";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -17,28 +9,51 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
-import { Form } from "./ui/form";
+} from "@/components/ui/dialog";
+import { Form } from "@/components/ui/form";
+import { editServer } from "@/lib/action/servers.action";
+import { serverSchema } from "@/lib/validations";
+import { useModalStore } from "@/store/modal.store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
-const CreateServerModal = () => {
+const EditServerModal = () => {
   const isOpen = useModalStore((state) => state.isOpen);
   const type = useModalStore((state) => state.type);
   const onClose = useModalStore((state) => state.onClose);
-  const isModalOpen = isOpen && type === "createServer";
+  const data = useModalStore((state) => state.data);
+
+  const isModalOpen = isOpen && type === "editServer";
+
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof serverSchema>>({
     resolver: zodResolver(serverSchema),
     defaultValues: {
-      name: "",
-      imageUrl: "",
+      name: data?.server?.name || "",
+      imageUrl: data?.server?.imageUrl || "",
     },
   });
 
-  const pathname = usePathname();
+  useEffect(() => {
+    if (data?.server) {
+      form.setValue("name", data?.server?.name || "");
+      form.setValue("imageUrl", data?.server?.imageUrl || "");
+    }
+  }, [data?.server, form]);
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof serverSchema>) {
+    if (!data?.server) {
+      return;
+    }
+
     try {
-      const res = await createServer(values, pathname);
+      const res = await editServer(data?.server?.id, values, pathname);
       if (res.success) {
         toast.success(res.message);
       }
@@ -80,8 +95,12 @@ const CreateServerModal = () => {
               placeholder="Server Name"
             />
             <DialogFooter>
-              <Button variant="primary" type="submit">
-                Submit
+              <Button
+                disabled={form.formState.isSubmitting}
+                variant="primary"
+                type="submit"
+              >
+                Save Changes
               </Button>
             </DialogFooter>
           </form>
@@ -91,4 +110,4 @@ const CreateServerModal = () => {
   );
 };
 
-export default CreateServerModal;
+export default EditServerModal;

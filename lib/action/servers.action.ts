@@ -18,9 +18,7 @@ export const getUserServers = async (profileId: string) => {
       },
     });
 
-    if (server) return server;
-
-    return null;
+    return server;
   } catch (error) {
     console.log(error);
     throw new Error(
@@ -41,6 +39,12 @@ export const createServer = async (
 
     const profile = await getProfile();
 
+    if(!profile) {
+      throw new Error("Unauthorized");
+    }
+
+
+
     const { name, imageUrl } = validateForm.data;
 
     const server = await db.server.create({
@@ -51,8 +55,9 @@ export const createServer = async (
         inviteCode: Math.random().toString(36).substring(2, 10),
         channels: {
           create: {
-            name: "general",
+            name: "General",
             profileId: profile?.id,
+
           },
         },
         members: {
@@ -118,8 +123,6 @@ export const getServerById = async (profileId: string, serverId: string) => {
       },
     });
 
-    if (!server) throw new Error("Server not found");
-
     return server;
   } catch (error) {
     console.log(error);
@@ -155,6 +158,122 @@ export const getServerChannels = async (serverId: string) => {
     if (!server) throw new Error("Server not found");
 
     return server;
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const generateNewInviteCode = async (
+  serverId: string,
+  pathname: string
+) => {
+  try {
+    const server = await db.server.findUnique({
+      where: {
+        id: serverId,
+      },
+    });
+    if (!server) throw new Error("Server not found");
+
+    const newInviteCode = Math.random().toString(36).substring(2, 10);
+    await db.server.update({
+      where: {
+        id: serverId,
+      },
+      data: {
+        inviteCode: newInviteCode,
+      },
+    });
+    revalidatePath(pathname);
+
+    return {
+      message: "New invite code generated successfully",
+      success: 200,
+      inviteCode: newInviteCode,
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const editServer = async (
+  serverId: string,
+  values: z.infer<typeof serverSchema>,
+  pathname: string
+) => {
+  try {
+    const validateForm = serverSchema.safeParse(values);
+    if (!validateForm.success) {
+      throw new Error(validateForm.error.message);
+    }
+
+    const { name, imageUrl } = validateForm.data;
+
+    const server = await db.server.update({
+      where: {
+        id: serverId,
+      },
+      data: {
+        name,
+        imageUrl,
+      },
+    });
+
+    if (!server) throw new Error("Server not found");
+
+    revalidatePath(pathname);
+
+    return {
+      message: "Server updated successfully",
+      success: 200,
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const leaveServer = async (serverId: string, pathname: string) => {
+  try {
+    const profile = await getProfile();
+
+    if (!profile) throw new Error("Unauthorized");
+
+    await db.server.update({
+      where: {
+        id: serverId,
+        profileId: {
+          not: profile.id,
+        },
+        members: {
+          some: {
+            profileId: profile.id,
+          },
+        },
+      },
+      data: {
+        members: {
+          deleteMany: {
+            profileId: profile.id,
+          },
+        },
+      },
+    });
+
+    revalidatePath(pathname);
+
+    return {
+      message: "Left server successfully",
+      success: 200,
+    };
   } catch (error) {
     console.log(error);
     throw new Error(

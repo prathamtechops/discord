@@ -1,8 +1,12 @@
 "use client";
 
+import CreateChannelModal from "@/components/modal/CreateChannelModal";
+import CreateServerModal from "@/components/modal/CreateServerModal";
+import EditServerModal from "@/components/modal/EditServerModal";
+import InviteModal from "@/components/modal/InviteModal";
+import MembersModal from "@/components/modal/MembersModal";
 import React from "react";
-import CreateServerModal from "./CreateServerModal";
-import InviteModal from "./InviteModal";
+import LeaveServerModal from "./modal/LeaveServer";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = React.useState(false);
@@ -19,6 +23,10 @@ export const ModalProvider = () => {
     <>
       <CreateServerModal />
       <InviteModal />
+      <EditServerModal />
+      <MembersModal />
+      <CreateChannelModal />
+      <LeaveServerModal />
     </>
   );
 };
