@@ -39,11 +39,9 @@ export const createServer = async (
 
     const profile = await getProfile();
 
-    if(!profile) {
+    if (!profile) {
       throw new Error("Unauthorized");
     }
-
-
 
     const { name, imageUrl } = validateForm.data;
 
@@ -57,7 +55,6 @@ export const createServer = async (
           create: {
             name: "General",
             profileId: profile?.id,
-
           },
         },
         members: {
@@ -272,6 +269,33 @@ export const leaveServer = async (serverId: string, pathname: string) => {
 
     return {
       message: "Left server successfully",
+      success: 200,
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error(
+      error instanceof Error ? error.message : "Something went wrong"
+    );
+  }
+};
+
+export const deleteServer = async (serverId: string, pathname: string) => {
+  try {
+    const profile = await getProfile();
+
+    if (!profile) throw new Error("Unauthorized");
+
+   await db.server.delete({
+      where: {
+        id: serverId,
+        profileId: profile.id,
+      },
+    });
+
+    revalidatePath(pathname);
+
+    return {
+      message: "Server deleted successfully",
       success: 200,
     };
   } catch (error) {

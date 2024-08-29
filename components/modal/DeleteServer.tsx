@@ -7,20 +7,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { leaveServer } from "@/lib/action/servers.action";
+import { deleteServer } from "@/lib/action/servers.action";
 import { useModalStore } from "@/store/modal.store";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 
-const LeaveServerModal = () => {
+const DeleteServerModal = () => {
   const isOpen = useModalStore((state) => state.isOpen);
   const type = useModalStore((state) => state.type);
   const onClose = useModalStore((state) => state.onClose);
   const data = useModalStore((state) => state.data);
 
-  const isModalOpen = isOpen && type === "leaveServer";
+  const isModalOpen = isOpen && type === "deleteServer";
 
   const [isloading, setIsLoading] = useState(false);
 
@@ -30,7 +30,7 @@ const LeaveServerModal = () => {
     if (!data.server || !data.server.id) return;
     try {
       setIsLoading(true);
-      const res = await leaveServer(data?.server?.id, pathname);
+      const res = await deleteServer(data?.server?.id, pathname);
       if (res.success) {
         toast.success(res.message);
         onClose();
@@ -47,13 +47,15 @@ const LeaveServerModal = () => {
       <DialogContent className="overflow-hidden ">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">
-            Leave Server
+            Delete Server
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground">
-            Are you sure you want to leave{" "}
+            Are you sure you want to do this?
+            <br />
             <span className="font-semibold text-indigo-500">
               {data?.server?.name}
-            </span>
+            </span>{" "}
+            will be permanently deleted.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="rounded-md bg-gray-100 dark:bg-gray-800 ">
@@ -75,4 +77,4 @@ const LeaveServerModal = () => {
   );
 };
 
-export default LeaveServerModal;
+export default DeleteServerModal;

@@ -6,6 +6,7 @@ import EditServerModal from "@/components/modal/EditServerModal";
 import InviteModal from "@/components/modal/InviteModal";
 import MembersModal from "@/components/modal/MembersModal";
 import React from "react";
+import DeleteServerModal from "./modal/DeleteServer";
 import LeaveServerModal from "./modal/LeaveServer";
 
 export const ModalProvider = () => {
@@ -27,6 +28,8 @@ export const ModalProvider = () => {
       <MembersModal />
       <CreateChannelModal />
       <LeaveServerModal />
+
+      <DeleteServerModal />
     </>
   );
 };
