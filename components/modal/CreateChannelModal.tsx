@@ -22,6 +22,7 @@ import { useModalStore } from "@/store/modal.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChannelType } from "@prisma/client";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -38,15 +39,21 @@ const CreateChannelModal = () => {
   const type = useModalStore((state) => state.type);
   const onClose = useModalStore((state) => state.onClose);
   const isModalOpen = isOpen && type === "createChannel";
-  const { server } = useModalStore((state) => state.data);
+  const { server, channelType } = useModalStore((state) => state.data);
 
   const form = useForm<z.infer<typeof channelSchema>>({
     resolver: zodResolver(channelSchema),
     defaultValues: {
       name: "",
-      type: "TEXT",
+      type: channelType || ChannelType.TEXT,
     },
   });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    }
+  }, [channelType, form]);
 
   const pathname = usePathname();
 

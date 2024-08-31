@@ -10,8 +10,8 @@ export const channelSchema = z.object({
   name: z
     .string()
     .min(1, "Channel Name is required")
-    .refine((name) => name !== "General", {
-      message: "General is reserved",
+    .refine((name) => name !== "general", {
+      message: "general is reserved",
     }),
   type: z.nativeEnum(ChannelType),
 });

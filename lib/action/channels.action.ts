@@ -1,6 +1,7 @@
 "use server";
 
 import { MemberRole } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "../db";
 import { channelSchema } from "../validations";
@@ -48,6 +49,8 @@ export const createChannel = async (
     });
 
     if (!server) throw new Error("Failed to create channel");
+
+    revalidatePath(pathname);
 
     return {
       success: true,

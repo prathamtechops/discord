@@ -53,7 +53,7 @@ export const createServer = async (
         inviteCode: Math.random().toString(36).substring(2, 10),
         channels: {
           create: {
-            name: "General",
+            name: "general",
             profileId: profile?.id,
           },
         },
@@ -285,7 +285,7 @@ export const deleteServer = async (serverId: string, pathname: string) => {
 
     if (!profile) throw new Error("Unauthorized");
 
-   await db.server.delete({
+    await db.server.delete({
       where: {
         id: serverId,
         profileId: profile.id,
