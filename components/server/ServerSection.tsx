@@ -4,7 +4,7 @@ import { useModalStore } from "@/store/modal.store";
 import { ServerWithMembersWithProfile } from "@/types";
 import { ChannelType, MemberRole } from "@prisma/client";
 import { PlusIcon, Settings } from "lucide-react";
-import ActionTooltip from "./ActionTooltip";
+import ActionTooltip from "../ActionTooltip";
 
 interface ServerSectionProps {
   label: string;

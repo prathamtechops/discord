@@ -1,13 +1,13 @@
 import { getServerChannels } from "@/lib/action/servers.action";
 import { ChannelType, MemberRole, Profile } from "@prisma/client";
 import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
+import { Separator } from "../ui/separator";
 import ServerChannel from "./ServerChannel";
 import { ServerHeader } from "./ServerHeader";
 import ServerMember from "./ServerMember";
 import ServerSearch from "./ServerSearch";
 import ServerSection from "./ServerSection";
-import { ScrollArea } from "./ui/scroll-area";
-import { Separator } from "./ui/separator";
 
 interface ServerSidebarProps {
   serverId: string;

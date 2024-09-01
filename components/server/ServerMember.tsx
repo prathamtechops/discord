@@ -3,9 +3,9 @@
 import { cn } from "@/lib/utils";
 import { ChannelType, Member, Profile, Server } from "@prisma/client";
 import { Hash, Mic, Video } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import UserAvatar from "../UserAvatar";
 import { roleMap } from "./ServerSiderbar";
-import UserAvatar from "./UserAvatar";
 
 interface ServerMemberProps {
   server: Server;
@@ -20,21 +20,27 @@ export const iconMap = {
 
 const ServerMember = ({ member, server }: ServerMemberProps) => {
   const params = useParams();
+  const router = useRouter();
 
   const icon = roleMap[member.role];
 
+  const onClick = () => {
+    router.push(`/server/${server.id}/conversation/${member.id}`);
+  };
+
   return (
     <button
+      onClick={onClick}
       className={cn(
         "group p-2 rounded-md flex items-center gap-x-2 w-full bg-background/10 hover:bg-background/20 transition mb-1",
-        params?.memberId === member.id && "bg-background/30"
+        params?.memberId === member.id && "bg-indigo-500/25"
       )}
     >
       <UserAvatar src={member.profile.imageUrl} className="size-6" />
       <p
         className={cn(
           "text-sm font-semibold text-muted-foreground transition group-hover:text-muted-foreground/80 truncate",
-          params?.channelId === member.id &&
+          params?.memberId === member.id &&
             "text-primary hover:text-muted-foreground"
         )}
       >

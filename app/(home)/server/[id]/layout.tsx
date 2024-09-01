@@ -1,4 +1,4 @@
-import ServerSiderbar from "@/components/ServerSiderbar";
+import ServerSiderbar from "@/components/server/ServerSiderbar";
 import { getProfile } from "@/lib/action/profile.action";
 import { getServerById } from "@/lib/action/servers.action";
 import { redirect } from "next/navigation";

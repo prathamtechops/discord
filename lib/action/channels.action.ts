@@ -2,6 +2,7 @@
 
 import { MemberRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "../db";
 import { channelSchema } from "../validations";
@@ -127,6 +128,8 @@ export const updateChannel = async (
 
     const { name, type } = validateForm.data;
 
+    if (name === "general") throw new Error("Channel name not allowed");
+
     const server = await db.server.update({
       where: {
         id: serverId,
@@ -144,6 +147,9 @@ export const updateChannel = async (
           update: {
             where: {
               id: channelId,
+              name: {
+                not: "general",
+              },
             },
             data: {
               name,
@@ -166,5 +172,42 @@ export const updateChannel = async (
     throw new Error(
       error instanceof Error ? error.message : "Something went wrong"
     );
+  }
+};
+
+export const redirectToGeneral = async (serverId: string) => {
+  try {
+    const profile = await getProfile();
+
+    if (!profile) return redirect("/sign-in");
+
+    const server = await db.server.findUnique({
+      where: {
+        id: serverId,
+        members: {
+          some: {
+            profileId: profile.id,
+          },
+        },
+      },
+      include: {
+        channels: {
+          where: {
+            name: "general",
+          },
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
+      },
+    });
+
+    if (!server) console.log("server not found");
+
+    const initialChannel = server?.channels[0];
+
+    return initialChannel?.id;
+  } catch (error) {
+    return null;
   }
 };

@@ -3,7 +3,7 @@
 import { useModalStore } from "@/store/modal.store";
 import { ServerWithMembersWithProfile } from "@/types";
 import { GearIcon } from "@radix-ui/react-icons";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 
 const ServerSttings = ({
   server,

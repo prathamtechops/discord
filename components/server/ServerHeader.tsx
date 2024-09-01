@@ -1,18 +1,18 @@
 import { ServerWithMembersWithProfile } from "@/types";
 import { MemberRole } from "@prisma/client";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import CreateChannelButton from "./CreateChannelAction";
-import DeleteServerButton from "./DeleteServerButton";
-import InviteButton from "./InviteButton";
-import LeaveServerButton from "./LeaveServer";
-import ManageMembers from "./ManageMembers";
-import ServerSttings from "./ServerSttings";
+import CreateChannelButton from "../CreateChannelAction";
+import DeleteServerButton from "../DeleteServerButton";
+import InviteButton from "../InviteButton";
+import LeaveServerButton from "../LeaveServer";
+import ManageMembers from "../ManageMembers";
+import ServerSttings from "../ServerSttings";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 
 interface ServerHeaderProps {
   server: ServerWithMembersWithProfile;

@@ -53,7 +53,7 @@ const ServerSearch = ({ data }: ServerSearchProps) => {
     setOpen(false);
 
     if (type === "member") {
-      return router.push(`/server/${params.id}/conversations/${id}`);
+      return router.push(`/server/${params.id}/conversation/${id}`);
     }
 
     if (type === "channel") {

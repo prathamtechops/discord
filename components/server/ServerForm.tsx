@@ -7,11 +7,11 @@ import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import FileUploadInput from "./FileUploadInput";
-import InputField from "./InputField";
-import { Button } from "./ui/button";
-import { DialogFooter } from "./ui/dialog";
-import { Form } from "./ui/form";
+import FileUploadInput from "../FileUploadInput";
+import InputField from "../InputField";
+import { Button } from "../ui/button";
+import { DialogFooter } from "../ui/dialog";
+import { Form } from "../ui/form";
 
 export const ServerForm = () => {
   const form = useForm<z.infer<typeof serverSchema>>({

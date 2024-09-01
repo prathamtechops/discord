@@ -1,4 +1,4 @@
-import { ServerForm } from "@/components/ServerForm";
+import { ServerForm } from "@/components/server/ServerForm";
 import {
   Dialog,
   DialogContent,
