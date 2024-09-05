@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { ModalProvider } from "@/components/modal-provider";
+import { SocketProvider } from "@/components/socket-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
@@ -30,9 +31,11 @@ export default function RootLayout({
             defaultTheme="dark"
             disableTransitionOnChange
           >
-            {children}
-            <ModalProvider />
-            <Toaster/>
+            <SocketProvider>
+              {children}
+              <ModalProvider />
+            </SocketProvider>
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

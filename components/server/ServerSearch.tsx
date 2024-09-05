@@ -1,8 +1,5 @@
 "use client";
 
-import { Search } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,7 +7,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "./ui/command";
+} from "@/components/ui/command";
+import { Search } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface ServerSearchProps {
   data: {

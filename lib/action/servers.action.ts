@@ -2,6 +2,7 @@
 import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { serverSchema } from "../validations";
 import { getProfile } from "./profile.action";
@@ -303,5 +304,24 @@ export const deleteServer = async (serverId: string, pathname: string) => {
     throw new Error(
       error instanceof Error ? error.message : "Something went wrong"
     );
+  }
+};
+
+export const isServerMember = async (serverId: string, profileId: string) => {
+  try {
+    const server = await db.server.findUnique({
+      where: {
+        id: serverId,
+        members: {
+          some: {
+            profileId,
+          },
+        },
+      },
+    });
+    if (!server) return redirect("/");
+    return true;
+  } catch (error) {
+    return null;
   }
 };

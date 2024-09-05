@@ -211,3 +211,32 @@ export const redirectToGeneral = async (serverId: string) => {
     return null;
   }
 };
+
+export const getChannel = async (serverid: string, channelId: string) => {
+  try {
+    const profile = await getProfile();
+
+    if (!profile) return null;
+
+    const channel = await db.channel.findUnique({
+      where: {
+        id: channelId,
+      },
+    });
+
+    const member = await db.member.findFirst({
+      where: {
+        profileId: profile.id,
+        serverId: serverid,
+      },
+    });
+
+    return {
+      channel,
+      member,
+      profile,
+    };
+  } catch (err) {
+    return null;
+  }
+};
