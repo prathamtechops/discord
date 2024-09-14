@@ -14,7 +14,7 @@ app.prepare().then(() => {
 
   const io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:3002", // Replace with your client's origin
+      origin: "http://localhost:3002",
       methods: ["GET", "POST"],
       credentials: true,
     },
